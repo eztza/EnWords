@@ -14,9 +14,8 @@ FayasNoushad = Client(
 )
 
 START_TEXT = """
-اهلا بك {}, انا بوت الترجمة 🤗
-
-تابعنا : @Tech_Scene
+اهلا بك {} في بوت الترجمة ☺
+اضغط زر المساعدة لمعرفة كيفية الاستخدام
 """
 HELP_TEXT = """
 - ارسل فقط الجملة المراد ترجمتها ثم ضع | ثم كود اللغة
@@ -118,9 +117,8 @@ async def translate(bot, update):
     message = await update.reply_text("`تتم الترجمة..`")
     try:
         translate = translator.translate(text, dest=language)
-        translate_text = f"**{language} الترجمة الى : **"
+        translate_text = f"**تمت الترجمة : {language}**"
         translate_text += f"\n\n{translate.text}"
-        translate_text += "\n\n@Tech_Scene"
         if len(translate_text) < 4096:
             await message.edit_text(
                 text=translate_text,
