@@ -66,7 +66,7 @@ CLOSE_BUTTON = InlineKeyboardMarkup(
 TRANSLATE_BUTTON = InlineKeyboardMarkup(
         [[
         InlineKeyboardButton('تابعتا', url='https://telegram.me/ezbots_ch'),
-        InlineKeyboardButton('حذف النتيجة',callback_data='close')
+        InlineKeyboardButton('الرئيسية', callback_data='home')
         ]]
     )
     
