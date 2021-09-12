@@ -1,4 +1,4 @@
-# by Tech Scene on TELEGRAM.
+# by Dev EZ
 
 import os
 from io import BytesIO
@@ -6,7 +6,7 @@ from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from googletrans import Translator
 
-FayasNoushad = Client(
+DevEZ = Client(
     "Translator Bot",
     bot_token = os.environ["BOT_TOKEN"],
     api_id = int(os.environ["API_ID"]),
@@ -21,50 +21,52 @@ HELP_TEXT = """
 - ارسل فقط الجملة المراد ترجمتها ثم ضع | ثم كود اللغة
 
 مثال : `Example Text | en`
-
-by @Tech_Scene
 """
 ABOUT_TEXT = """
-- **البوت :** `بوت الترجمة`
-- **القناة :** [Follow Us](https://telegram.me/tech_scene)
+الاصدار التجريبي من بوت الترجمة الفورية على تيليجرام الخاص بمجموعة بوتات EZ Bots.
+قد تواجه بعض الاخطاء عند الترجمة والتي نعمل بشكل دائم على إصلاحها كما نقوم بإضافة العديد من المميزات الفريدة من نوعها والتي ستجدها قريبا في البوت.
 """
+
 START_BUTTONS = InlineKeyboardMarkup(
         [[
-        InlineKeyboardButton('المساعدة', callback_data='help'),
-        InlineKeyboardButton('عن البوت', callback_data='about'),
-        InlineKeyboardButton('إغلاق', callback_data='close')
+        InlineKeyboardButton('كيفية الاستخدام؟', callback_data='help'),
+        InlineKeyboardButton('عن البوت', callback_data='about')
         ]]
     )
+    
 HELP_BUTTONS = InlineKeyboardMarkup(
         [[
         InlineKeyboardButton('الرئيسية', callback_data='home'),
-        InlineKeyboardButton('عن البوت', callback_data='about'),
-        InlineKeyboardButton('إغلاق', callback_data='close')
+        InlineKeyboardButton('عن البوت', callback_data='about')
         ]]
     )
+    
 ABOUT_BUTTONS = InlineKeyboardMarkup(
         [[
-        InlineKeyboardButton('قناتنا', url='https://telegram.me/tech_scene'),
-        InlineKeyboardButton('اتصل بنا', url='https://telegram.me/')
+        InlineKeyboardButton('قناتنا', url='https://telegram.me/tech_scene')
+        ## ,InlineKeyboardButton('اتصل بنا', url='https://telegram.me/')
         ],[
         InlineKeyboardButton('الرئيسية', callback_data='home'),
-        InlineKeyboardButton('المساعدة', callback_data='help'),
-        InlineKeyboardButton('إغلاق', callback_data='close')
+        InlineKeyboardButton('كيفية الاستخدام', callback_data='help')
         ]]
     )
+    
 CLOSE_BUTTON = InlineKeyboardMarkup(
         [[
         InlineKeyboardButton('إغلاق', callback_data='close')
         ]]
     )
+    
 TRANSLATE_BUTTON = InlineKeyboardMarkup(
         [[
-        InlineKeyboardButton('قناتنا', url='https://telegram.me/Tech_Scene')
+        InlineKeyboardButton('تابعتا', url='https://telegram.me/ezbots_ch'),
+        InlineKeyboardButton('حذف النتيجة',callback_data='close')
         ]]
     )
+    
 DEFAULT_LANGUAGE = os.environ.get("DEFAULT_LANGUAGE", "ar")
 
-@FayasNoushad.on_callback_query()
+@DevEZ.on_callback_query()
 async def cb_data(bot, update):
     if update.data == "home":
         await update.message.edit_text(
@@ -88,7 +90,7 @@ async def cb_data(bot, update):
         await update.message.delete()
     
 
-@FayasNoushad.on_message(filters.command(["start"]))
+@DevEZ.on_message(filters.command(["start"]))
 async def start(bot, update):
     text = START_TEXT.format(update.from_user.mention)
     reply_markup = START_BUTTONS
@@ -98,7 +100,7 @@ async def start(bot, update):
         reply_markup=reply_markup
     )
 
-@FayasNoushad.on_message((filters.private | filters.group | ~filters.channel) & filters.text)
+@DevEZ.on_message((filters.private | filters.group | ~filters.channel) & filters.text)
 async def translate(bot, update):
     if update.chat.type == "private":
         if " | " in update.text:
@@ -117,7 +119,7 @@ async def translate(bot, update):
     message = await update.reply_text("`تتم الترجمة..`")
     try:
         translate = translator.translate(text, dest=language)
-        translate_text = f"**تمت الترجمة : {language}**"
+        translate_text = f"**تمت الترجمة الى : {language}**"
         translate_text += f"\n\n{translate.text}"
         if len(translate_text) < 4096:
             await message.edit_text(
@@ -130,13 +132,13 @@ async def translate(bot, update):
                 translate_file.name = language + ".txt"
                 await update.reply_document(
                     document=translate_file,
-                    caption="بواسطة @Tech_Scene",
+                    caption="هذه النسخة التجريبية من البوت، نعمل على اضافة المزيد من التحسينات والخصائص المميزة قريباً",
                     reply_markup=TRANSLATE_BUTTON
                 )
                 await message.delete()
     except Exception as error:
         print(error)
-        await message.edit_text("حدث خطأ ما ، اتصل بنا لإصلاحه")
+        await message.edit_text("حدث خطأ، حاول مجدداً..")
         return
 
-FayasNoushad.run()
+DevEZ.run()
