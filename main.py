@@ -18,9 +18,12 @@ START_TEXT = """
 اضغط زر المساعدة لمعرفة كيفية الاستخدام
 """
 HELP_TEXT = """
-- ارسل فقط الجملة المراد ترجمتها ثم ضع | ثم كود اللغة
+- ارسل فقط الجملة المراد ترجمتها ثم ضع - ثم كود اللغة المراد الترجمة اليها
 
-مثال : `Example Text | en`
+مثال : `Hello World - ar`
+امثلة عن اكواد اللغات :
+
+ar : العربية, en : الانكليزية, fr : الفرنسية
 """
 ABOUT_TEXT = """
 الاصدار التجريبي من بوت الترجمة الفورية على تيليجرام الخاص بمجموعة بوتات EZ Bots.
@@ -103,15 +106,15 @@ async def start(bot, update):
 @DevEZ.on_message((filters.private | filters.group | ~filters.channel) & filters.text)
 async def translate(bot, update):
     if update.chat.type == "private":
-        if " | " in update.text:
-            text, language = update.text.split(" | ", 1)
+        if " - " in update.text:
+            text, language = update.text.split(" - ", 1)
         else:
             text = update.text
             language = DEFAULT_LANGUAGE
     else:
         text = update.reply_to_message.text
         if " " in update.text:
-            command, language = update.text.split(" | ", 1)
+            command, language = update.text.split(" - ", 1)
         else:
             language = DEFAULT_LANGUAGE
     translator = Translator()
